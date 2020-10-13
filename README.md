@@ -1,68 +1,73 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Github User Query with Controlled Components
 
-## Available Scripts
+For this exercise you'll query the Github Users API for profile information on a specific user. You'll create a form that submits a username to the API and return the results on the same page.
 
-In the project directory, you can run:
+The Github API URL is (replace [username] with an actual username): https://api.github.com/users/[username]
 
-### `npm start`
+_REMINDER_: You'll need to setup controlled components in your React form: https://reactjs.org/docs/forms.html
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Expected Behavior
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+- The page loads you see the form, but no user info
+- Type a username into the input and click "submit"
+- A user's information populates the page
+- Additional users are added to the page with subsequent searches
 
-### `npm test`
+## Getting Started
+- Run `npx create-react-app github-users-query`
+- Remove all the default information from `App.js` (you'll replace it with new components)
+- Create a folder called `components`
+- In that folder create:
+  - `SearchForm` - This is the _default_ component. It's a Class based component that loads a search form and maintains `state`
+  - `UserCardList` - Accepts an array of user data as a PROP
+  - `UserCard` - Accepts a single user's information as a PROP
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+_NOTE:_ `UserCardList` and `UserCard` are are similar to the Random User exercise!
 
-### `npm run build`
+## Suggested Component Breakdown
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## `SearchForm.jsx` (Class Based Component)
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+- Create a form in this component
+  - The form will need a CONTROLLED text input and a submit button
+  - The form will need a `_handleSubmit` function bound to `onSubmit`
+  - The text input will need a `_handleChange` function bound to `onChange`
+- Initial state for `SearchForm.jsx` should contain:
+  - The value of the user name being searched (this is bound to our input!) i.e. `userName`
+  - An array of user data (_we can request more than one user!_) i.e. `users`
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Functions
 
-### `npm run eject`
+`handleChange`:
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+- This will `setState` to change the username value based on what is typed
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+`handleSubmit`:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+- On submit the form will take the username value and make a `fetch()` request to the Github API
+- The response from the API will be a _single user_.
+- That response will need to be added to the existing array of users
+- _HINT:_ The spread operator will come in handy here, eg: `[...this.state.users, newUserData]`
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+#### Notes
 
-## Learn More
+- Other than the `render()` method, you will not _need_ any other lifecycle methods.
+- You're free to add lifecycle methods if you'd like (i.e. to start with at least one user being shown)
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## `UserCardList` (Functional Component)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- This component takes the array of users (from `SearchForm`) as a prop
+- `map` through this list, passing an individual user's information into the `UserCard` component
 
-### Code Splitting
+## `UserCard` (Functional Component)
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
+- This component takes a user objects as a prop (from `UserCardList`)
+- Render whatever data you'd like from a user's profile.
+  - _NOTE_: Not all users have all their information filled out!
+  - I'd recommend starting with the user's `avatar_url`, since almost every user has some sort of avatar image.
 
-### Analyzing the Bundle Size
+## BONUS
 
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
+This exercise was inspired by the following blog post: https://flaviocopes.com/react-example-githubusers/
 
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+The blog post uses 100% functional components and React Hooks. If you'd like to try this method, create a new branch called `user-fetch-hooks` and refactor your project using Flavio's version as a template.
