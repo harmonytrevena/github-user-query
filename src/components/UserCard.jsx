@@ -1,5 +1,8 @@
 import React from 'react';
 
+import 'bulma/css/bulma.css';
+
+
 const UserCard = props => {
   const { user } = props;
   return (
